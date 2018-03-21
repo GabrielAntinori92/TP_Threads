@@ -9,7 +9,7 @@ public class BeerConsumer extends Thread {
     }
 
     public void run(){
-        while(Boolean.TRUE){
+        while(beerhouse.isDisponible()){
             beerhouse.consume(this);
             try{
                 sleep(3000);
@@ -17,7 +17,8 @@ public class BeerConsumer extends Thread {
 
         }
 
-
+        Thread.interrupted();
     }
+
 
 }

@@ -15,9 +15,9 @@ public class BeerProducer extends Thread {
 
 
     public void run(){
-        while(Boolean.TRUE){
+        while(beerhouse.reponerStock()){
             try{
-                for(int i = 0; i<5; i++){
+                for(int i = 0; i<10; i++){
                     this.beerlist.add("beer " + i);
                 }
                 this.beerhouse.produce(beerlist);
@@ -26,6 +26,8 @@ public class BeerProducer extends Thread {
             }catch (InterruptedException e){}
 
         }
+
+        Thread.interrupted();
     }
 
 }

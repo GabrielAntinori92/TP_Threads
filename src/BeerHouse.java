@@ -21,6 +21,7 @@ public class BeerHouse {
         while(!reponerStock())
         {
             try{
+                System.out.println("Productor esperando");
                 wait();
             }catch (InterruptedException e){}
         }
@@ -34,13 +35,20 @@ public class BeerHouse {
         this.stock = this.beerlist.size();
         System.out.format("cantidad de cerveza en beer house: %d\n",stock);
         notifyAll();
+        if(this.stock == 100){
+            Thread.interrupted();
+        }
     }
 
     public synchronized void consume(BeerConsumer beerconsumer){
         while(!isDisponible())
         {
             try{
+                System.out.println("Consumidor esperando");
                 wait();
+                if(this.stock < 0){
+                    Thread.interrupted();
+                }
             }catch(InterruptedException e){}
 
         }
@@ -51,7 +59,7 @@ public class BeerHouse {
         this.beerlist.remove(beerindex);
         this.stock = this.beerlist.size();
 
-
+        System.out.format("Stock: %d\n",this.stock);
         notifyAll();
     }
 
