@@ -1,19 +1,22 @@
 public class main {
+    private static BeerHouse bh;
+    private static final int CANT_CONSUMERS = 7;
+    private static BeerConsumer [] consumers;
+    private static BeerProducer bp1;
 
     public static void main(String arg[]){
-        BeerHouse bh = new BeerHouse();
-        BeerConsumer bc1 = new BeerConsumer("bc1",bh);
-        BeerConsumer bc2 = new BeerConsumer("bc2",bh);
-        BeerConsumer bc3 = new BeerConsumer("bc3",bh);
-        BeerProducer bp1 = new BeerProducer("bp1",bh);
-        BeerProducer bp2 = new BeerProducer("bp2",bh);
-
+        bh = new BeerHouse();
+        consumers = new BeerConsumer[CANT_CONSUMERS];
+        bp1 = new BeerProducer("bp1",bh);
 
         bp1.start();
-        bp2.start();
-        bc1.start();
-        bc2.start();
-        bc3.start();
+
+        for(int i = 0; i<7; i++){
+            consumers[i] = new BeerConsumer("bc"+i,bh);
+            consumers[i].start();
+        }
+
+
 
     }
 }

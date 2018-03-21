@@ -9,7 +9,7 @@ public class BeerConsumer extends Thread {
     }
 
     public void run(){
-        for(int i = 0; i<10; i++){
+        while(Boolean.TRUE){
             beerhouse.consume(this);
             try{
                 sleep(3000);

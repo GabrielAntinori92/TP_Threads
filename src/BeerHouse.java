@@ -6,6 +6,7 @@ public class BeerHouse {
 
     private List<String> beerlist;
     private int stock;
+    private final int STOCKMAX = 100;
     private Random dado;
 
     public BeerHouse(){
@@ -15,37 +16,50 @@ public class BeerHouse {
     }
 
 
-    public synchronized void produce(String beer){
+    public synchronized void produce(List<String> beers){
 
-        while(this.stock > 0)
+        while(!reponerStock())
         {
             try{
-                System.out.println("Producer espera para producir " + beer);
                 wait();
             }catch (InterruptedException e){}
         }
-        this.beerlist.add(beer);
+        for(String beer : beers){
+            if(this.beerlist.size() < this.STOCKMAX){
+                this.beerlist.add(beer);
+            }
+
+        }
+
         this.stock = this.beerlist.size();
-        notify();
+        System.out.format("cantidad de cerveza en beer house: %d\n",stock);
+        notifyAll();
     }
 
     public synchronized void consume(BeerConsumer beerconsumer){
-        while(this.stock <= 0)
+        while(!isDisponible())
         {
             try{
-                System.out.println("Consumidor esperando " + beerconsumer.getName());
                 wait();
             }catch(InterruptedException e){}
 
         }
 
         int beerindex = dado.nextInt(stock);
-        System.out.println(beerconsumer.getName() + "consumio: " + beerlist.get(beerindex));
+        System.out.println(beerconsumer.getName() + " consumio: " + beerlist.get(beerindex));
 
         this.beerlist.remove(beerindex);
         this.stock = this.beerlist.size();
 
 
         notifyAll();
+    }
+
+    public boolean isDisponible(){
+        return (this.stock > 0);
+    }
+
+    public boolean reponerStock(){
+        return (this.stock < this.STOCKMAX);
     }
 }
